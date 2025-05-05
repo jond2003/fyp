@@ -7,7 +7,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, classification_report
 import pandas as pd
 import matplotlib.pyplot as plt
-from global_vars import BLOGS_TRAIN_PATH, BERT_PATH, TRAINING_IMG_PATH
+from global_vars import BLOGS_PATH, BERT_PATH, TRAINING_IMG_PATH
 
 # ensure CUDA operations raise errors upon failure
 os.environ['CUDA_LAUNCH_BLOCKING'] = "1"
@@ -96,7 +96,7 @@ def load_blog_data(data_file):
 
 
 def train_classifier():
-    blogs, labels = load_blog_data(BLOGS_TRAIN_PATH)
+    blogs, labels = load_blog_data(BLOGS_PATH)
 
     # model parameters
     bert_model_name = 'bert-base-uncased'

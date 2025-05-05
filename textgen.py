@@ -2,7 +2,7 @@ import transformers
 import torch
 import pandas as pd
 import random
-from global_vars import MODEL_ID, TOPICS, TARGET_TEXT_PATH, BLOGS_TRAIN_PATH, \
+from global_vars import MODEL_ID, TOPICS, TARGET_TEXT_PATH, BLOGS_PATH, \
     SHAKESPEARE_EXAMPLE, SAMPLE_TEXT_PROMPT, TARGET_TEXT_PROMPT, REWRITE_TEXT_PROMPT, \
     TEXT_GEN_PATH
 
@@ -31,7 +31,7 @@ def generate_style_transfer():
     print("\nPerforming Style Transfer...")
     
     # load blog samples
-    blogs_df = pd.read_csv(BLOGS_TRAIN_PATH)
+    blogs_df = pd.read_csv(BLOGS_PATH)
     blogs = blogs_df['text'].tolist()
     labels = blogs_df['label'].tolist()
 

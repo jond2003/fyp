@@ -4,8 +4,6 @@ from transformers import BertModel
 # data file paths
 CORPUS_PATH = "data/corpus.csv"
 BLOGS_PATH = "data/blogs.csv"
-BLOGS_TRAIN_PATH = "data/blogs_train.csv"
-BLOGS_TEST_PATH = "data/blogs_test.csv"
 TARGET_TEXT_PATH = "data/target_texts.csv"
 
 # bert file paths

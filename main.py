@@ -1,15 +1,11 @@
 from preprocess import preprocess_blogs
 from classifier import train_classifier
-from tests import test_classifier, validate_results
+from tests import validate_results
 from textgen import generate_target_texts, generate_style_transfer
 
 def prepare_data():
     preprocess_blogs()
     generate_target_texts()
-
-def train_bert():
-    train_classifier()
-    test_classifier()
 
 def get_results():
     generate_style_transfer()
@@ -17,14 +13,13 @@ def get_results():
 
 def run_all():
     prepare_data()
-    train_bert()
+    train_classifier()
     get_results()
 
 # menu options
 options = {
     "Prepare Dataset and Target Texts": prepare_data,
-    "Train BERT Classifier": train_bert,
-    "Test BERT Classifier": test_classifier,
+    "Train BERT Classifier": train_classifier,
     "Generate Style Transfer Results": get_results,
     "Evaluate Style Transfer": validate_results,
     "All": run_all
