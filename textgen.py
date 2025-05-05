@@ -19,7 +19,7 @@ def generate_target_texts():
     for topic in TOPICS:
         output = pipeline(
             topic,
-            max_new_tokens=128,
+            max_new_tokens=64,
             temperature=0.1,
             pad_token_id=pipeline.tokenizer.eos_token_id
         )
