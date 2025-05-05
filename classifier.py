@@ -101,7 +101,7 @@ def train_classifier():
     # model parameters
     bert_model_name = 'bert-base-uncased'
     num_classes = len(set(labels))
-    max_length = 128
+    max_length = 512
     batch_size = 16
     num_epochs = 3
     learning_rate = 2e-5
