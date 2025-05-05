@@ -56,7 +56,7 @@ class BERTClassifier(nn.Module):
         return logits
 
 
-# training loop
+# training function
 def train(model, data_loader, optimizer, scheduler, device):
     model.train()  # set model to training mode
     for batch in data_loader:
@@ -70,7 +70,7 @@ def train(model, data_loader, optimizer, scheduler, device):
         optimizer.step()
         scheduler.step()  # update learning rate
 
-# evaluation loop
+# evaluation function
 def evaluate(model, data_loader, device):
     model.eval()  # set model to evaluation mode
     predictions = []
