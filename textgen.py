@@ -17,7 +17,12 @@ def generate_target_texts():
     print("\nGenerating target texts...")
     data = { "text": [] }
     for topic in TOPICS:
-        output = pipeline(topic, max_new_tokens=128, temperature=0.1, pad_token_id=pipeline.tokenizer.eos_token_id)
+        output = pipeline(
+            topic,
+            max_new_tokens=128,
+            temperature=0.1,
+            pad_token_id=pipeline.tokenizer.eos_token_id
+        )
         data['text'].append(output[0]['generated_text'])
     
 
@@ -65,7 +70,12 @@ def generate_style_transfer():
 
         for label in blogs_table.keys():
             prompt = build_prompt(target_text, blogs_table[label])
-            text_gen = pipeline(prompt, max_new_tokens=256, temperature=0.1, pad_token_id=pipeline.tokenizer.eos_token_id)
+            text_gen = pipeline(
+                prompt, 
+                max_new_tokens=256, 
+                temperature=0.1, 
+                pad_token_id=pipeline.tokenizer.eos_token_id
+            )
 
             # extract relevant part of output
             output = text_gen[0]["generated_text"][len(prompt):]
