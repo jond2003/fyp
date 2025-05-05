@@ -72,7 +72,7 @@ def generate_style_transfer():
             prompt = build_prompt(target_text, blogs_table[label])
             text_gen = pipeline(
                 prompt, 
-                max_new_tokens=256, 
+                max_new_tokens=128, 
                 temperature=0.1, 
                 pad_token_id=pipeline.tokenizer.eos_token_id
             )
@@ -95,7 +95,7 @@ def build_prompt(target_text, all_samples):
     prompt_samples = []  # samples to use in prompt
     searched_samples = []  # samples already searched
     total_chars = 0  # total character count of all the prompt samples
-    chars_target = 256 * 4  # target character count that we want to use in the prompt
+    chars_target = 128 * 4  # target character count that we want to use in the prompt
     
     # randomly selects samples from the given blogger until the character target is reached
     while total_chars < chars_target:
