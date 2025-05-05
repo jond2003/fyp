@@ -2,7 +2,7 @@ import transformers
 import torch
 import pandas as pd
 import random
-from constants import MODEL_ID, TOPICS, TARGET_TEXT_PATH, BLOGS_TRAIN_PATH, \
+from global_vars import MODEL_ID, TOPICS, TARGET_TEXT_PATH, BLOGS_TRAIN_PATH, \
     SHAKESPEARE_EXAMPLE, SAMPLE_TEXT_PROMPT, TARGET_TEXT_PROMPT, REWRITE_TEXT_PROMPT, \
     TEXT_GEN_PATH
 
@@ -111,6 +111,3 @@ def save_data(data, filename):
     df.to_csv(filename, index=False)
 
     print("\nSaved " + filename + "!")
-
-
-generate_style_transfer()

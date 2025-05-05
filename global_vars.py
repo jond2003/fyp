@@ -1,3 +1,6 @@
+from torch import nn
+from transformers import BertModel
+
 # data file paths
 CORPUS_PATH = "data/corpus.csv"
 BLOGS_PATH = "data/blogs.csv"

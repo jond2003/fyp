@@ -1,5 +1,5 @@
 import pandas as pd
-from constants import CORPUS_PATH, BLOGS_PATH, BLOGS_TRAIN_PATH, BLOGS_TEST_PATH
+from global_vars import CORPUS_PATH, BLOGS_PATH, BLOGS_TRAIN_PATH, BLOGS_TEST_PATH
 
 # narrow down dataset to 20 bloggers and preprocess data
 def reduce_blogs(data_file):
@@ -88,9 +88,10 @@ def save_data(blogs, labels, filename):
 
     print("\nSaved " + filename + "!")
 
-blogs, labels = reduce_blogs(CORPUS_PATH)
-train_blogs, train_labels, test_blogs, test_labels = split_data(blogs, labels)
+def preprocess_blogs():
+    blogs, labels = reduce_blogs(CORPUS_PATH)
+    train_blogs, train_labels, test_blogs, test_labels = split_data(blogs, labels)
 
-save_data(blogs, labels, BLOGS_PATH)  # narrowed blogs
-save_data(train_blogs, train_labels, BLOGS_TRAIN_PATH)  # training data
-save_data(test_blogs, test_labels, BLOGS_TEST_PATH)  # testing data
+    save_data(blogs, labels, BLOGS_PATH)  # narrowed blogs
+    save_data(train_blogs, train_labels, BLOGS_TRAIN_PATH)  # training data
+    save_data(test_blogs, test_labels, BLOGS_TEST_PATH)  # testing data

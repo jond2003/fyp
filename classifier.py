@@ -7,7 +7,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, classification_report
 import pandas as pd
 import matplotlib.pyplot as plt
-from constants import BLOGS_TRAIN_PATH, BERT_PATH, TRAINING_IMG_PATH
+from global_vars import BLOGS_TRAIN_PATH, BERT_PATH, TRAINING_IMG_PATH
 
 # ensure CUDA operations raise errors upon failure
 os.environ['CUDA_LAUNCH_BLOCKING'] = "1"
@@ -85,66 +85,68 @@ def load_blog_data(data_file):
     labels = df['label'].tolist()
     return blogs, labels
 
-blogs, labels = load_blog_data(BLOGS_TRAIN_PATH)
 
-# model parameters
-bert_model_name = 'bert-base-uncased'
-num_classes = len(set(labels))
-max_length = 128
-batch_size = 16
-num_epochs = 3
-learning_rate = 2e-5
+def train_classifier():
+    blogs, labels = load_blog_data(BLOGS_TRAIN_PATH)
 
-val_accuracies = []  # accuracies per epoch
+    # model parameters
+    bert_model_name = 'bert-base-uncased'
+    num_classes = len(set(labels))
+    max_length = 128
+    batch_size = 16
+    num_epochs = 3
+    learning_rate = 2e-5
 
-# split data into training and validation sets
-train_texts, val_texts, train_labels, val_labels = train_test_split(blogs, labels, test_size=0.2, random_state=42)
+    val_accuracies = []  # accuracies per epoch
 
-# initialise tokenizer and datasets
-tokenizer = BertTokenizer.from_pretrained(bert_model_name)
-train_dataset = TextClassificationDataset(train_texts, train_labels, tokenizer, max_length)
-val_dataset = TextClassificationDataset(val_texts, val_labels, tokenizer, max_length)
-train_dataloader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
-val_dataloader = DataLoader(val_dataset, batch_size=batch_size)
+    # split data into training and validation sets
+    train_texts, val_texts, train_labels, val_labels = train_test_split(blogs, labels, test_size=0.2, random_state=42)
 
-# use gpu if available
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-print(device)
+    # initialise tokenizer and datasets
+    tokenizer = BertTokenizer.from_pretrained(bert_model_name)
+    train_dataset = TextClassificationDataset(train_texts, train_labels, tokenizer, max_length)
+    val_dataset = TextClassificationDataset(val_texts, val_labels, tokenizer, max_length)
+    train_dataloader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
+    val_dataloader = DataLoader(val_dataset, batch_size=batch_size)
 
-# initialise model, optimizer, and learning rate scheduler
-model = BERTClassifier(bert_model_name, num_classes).to(device)
+    # use gpu if available
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    print(device)
 
-optimizer = torch.optim.AdamW(model.parameters(), lr=learning_rate)
-total_steps = len(train_dataloader) * num_epochs
-scheduler = get_linear_schedule_with_warmup(optimizer, num_warmup_steps=0, num_training_steps=total_steps)
+    # initialise model, optimizer, and learning rate scheduler
+    model = BERTClassifier(bert_model_name, num_classes).to(device)
 
-# training and evaluation loop
-for epoch in range(num_epochs):
-    print(f"Epoch {epoch + 1}/{num_epochs}")
-    train(model, train_dataloader, optimizer, scheduler, device)
-    accuracy, report = evaluate(model, val_dataloader, device)
-    val_accuracies.append({'Epoch': epoch + 1, 'Validation Accuracy': accuracy})
-    print(f"Validation Accuracy: {accuracy:.4f}")
-    print(report)
+    optimizer = torch.optim.AdamW(model.parameters(), lr=learning_rate)
+    total_steps = len(train_dataloader) * num_epochs
+    scheduler = get_linear_schedule_with_warmup(optimizer, num_warmup_steps=0, num_training_steps=total_steps)
 
-# save trained model
-torch.save(model.state_dict(), BERT_PATH)
+    # training and evaluation loop
+    for epoch in range(num_epochs):
+        print(f"Epoch {epoch + 1}/{num_epochs}")
+        train(model, train_dataloader, optimizer, scheduler, device)
+        accuracy, report = evaluate(model, val_dataloader, device)
+        val_accuracies.append({'Epoch': epoch + 1, 'Validation Accuracy': accuracy})
+        print(f"Validation Accuracy: {accuracy:.4f}")
+        print(report)
 
-# display validation accuracy table
-accuracy_df = pd.DataFrame(val_accuracies)
-print("\nValidation Accuracy per Epoch:")
-print(accuracy_df.to_string(index=False))
+    # save trained model
+    torch.save(model.state_dict(), BERT_PATH)
 
-# plot and save validation accuracy as an image
-epochs = [entry['Epoch'] for entry in val_accuracies]
-accuracies = [entry['Validation Accuracy'] for entry in val_accuracies]
+    # display validation accuracy table
+    accuracy_df = pd.DataFrame(val_accuracies)
+    print("\nValidation Accuracy per Epoch:")
+    print(accuracy_df.to_string(index=False))
 
-plt.figure(figsize=(10, 6))
-plt.plot(epochs, accuracies, marker='o', linestyle='-', color='blue')
-plt.title('Validation Accuracy per Epoch')
-plt.xlabel('Epoch')
-plt.ylabel('Accuracy')
-plt.xticks(epochs)
-plt.grid(True)
-plt.savefig(TRAINING_IMG_PATH)  # save image
-plt.show()
+    # plot and save validation accuracy as an image
+    epochs = [entry['Epoch'] for entry in val_accuracies]
+    accuracies = [entry['Validation Accuracy'] for entry in val_accuracies]
+
+    plt.figure(figsize=(10, 6))
+    plt.plot(epochs, accuracies, marker='o', linestyle='-', color='blue')
+    plt.title('Validation Accuracy per Epoch')
+    plt.xlabel('Epoch')
+    plt.ylabel('Accuracy')
+    plt.xticks(epochs)
+    plt.grid(True)
+    plt.savefig(TRAINING_IMG_PATH)  # save image
+    plt.show()
