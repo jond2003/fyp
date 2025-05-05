@@ -27,8 +27,17 @@ class TextClassificationDataset(Dataset):
     def __getitem__(self, idx):
         text = self.texts[idx]
         label = self.labels[idx]
-        encoding = self.tokenizer(text, return_tensors='pt', max_length=self.max_length, padding='max_length', truncation=True)
-        return {'input_ids': encoding['input_ids'].flatten(), 'attention_mask': encoding['attention_mask'].flatten(), 'label': torch.tensor(label)}
+        encoding = self.tokenizer(
+            text, return_tensors='pt', 
+            max_length=self.max_length, 
+            padding='max_length', 
+            truncation=True
+        )
+        return {
+            'input_ids': encoding['input_ids'].flatten(), 
+            'attention_mask': encoding['attention_mask'].flatten(), 
+            'label': torch.tensor(label)
+        }
 
 
 # BERT-based classification model
