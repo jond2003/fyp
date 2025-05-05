@@ -73,7 +73,7 @@ def generate_style_transfer():
             text_gen = pipeline(
                 prompt, 
                 max_new_tokens=128, 
-                temperature=0.1, 
+                temperature=0.2, 
                 pad_token_id=pipeline.tokenizer.eos_token_id
             )
 
