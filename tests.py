@@ -76,7 +76,7 @@ def validate_results():
 
 
 # predict writing style ownership using fine-tuned BERT classifier
-def predict_blogger(text, model, tokenizer, device, max_length=128):
+def predict_blogger(text, model, tokenizer, device, max_length=512):
     model.eval()  # set model to evaluation mode
     encoding = tokenizer(text, return_tensors='pt', max_length=max_length, padding='max_length', truncation=True)
     input_ids = encoding['input_ids'].to(device)
