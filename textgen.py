@@ -102,10 +102,8 @@ def build_prompt(target_text, all_samples):
         sample_index = random.randint(0, len(all_samples) - 1)
         if sample_index not in searched_samples:
             sample = all_samples[sample_index]
-            sample_chars = len(sample)
-            if total_chars + sample_chars < chars_target:
-                prompt_samples.append(sample)
-                total_chars += sample_chars
+            prompt_samples.append(sample)
+            total_chars += len(sample)
             searched_samples.append(sample_index)
     
     sample = " ".join(prompt_samples)  # prompt_samples concatenated
