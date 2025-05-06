@@ -27,6 +27,19 @@ TOPICS = [
     'Football highlights'
 ]
 
+TOPIC_BUZZWORDS = [
+    ['cars'],
+    ['fashion'],
+    ['television', 'tv'],
+    ['gaming'],
+    ['reading', 'books'],
+    ['art', 'exhibition'],
+    ['gardening'],
+    ['travel'],
+    ['family'],
+    ['football']
+]
+
 # prompting
 SAMPLE_TEXT_PROMPT = lambda author, sample: "Here is a sample of some text in Author "+author+"'s writing style: {"+sample+"}. "
 TARGET_TEXT_PROMPT = lambda text: "Here is the target text: {"+text+"}. "

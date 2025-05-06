@@ -2,7 +2,7 @@ import pandas as pd
 import torch
 from transformers import BertTokenizer
 from classifier import BERTClassifier
-from global_vars import BERT_PATH, TEXT_GEN_PATH
+from global_vars import BERT_PATH, TEXT_GEN_PATH, TOPIC_BUZZWORDS
 
 # initialize classifier
 def init_classifier():
@@ -47,6 +47,7 @@ def validate_results():
 
     predictions = {}
     correct_preds = 0
+    num_content_preserved = 0
 
     # individual texts
     for i in range(len(texts)):
@@ -62,6 +63,11 @@ def validate_results():
             predictions[target] = [is_correct]
         else:
             predictions[target].append(is_correct)
+
+        for bw in TOPIC_BUZZWORDS[target]:
+            if bw in text.lower(): 
+                num_content_preserved += 1
+                break
     
     # concatenated texts per blogger
     correct_concat_preds = 0
@@ -71,8 +77,9 @@ def validate_results():
 
         if blogger == pred_blogger: correct_concat_preds += 1
     
-    print(f"Predicted blogs with {(correct_preds*100)/len(bloggers)}% accuracy")
-    print(f"Predicted concatenated blogs with {(correct_concat_preds*100)/len(set(bloggers))}% accuracy")
+    print(f"Predicted blogs with {(correct_preds*100)/len(bloggers):.2f}% accuracy")
+    print(f"Predicted concatenated blogs with {(correct_concat_preds*100)/len(set(bloggers)):.2f}% accuracy")
+    print(f"{num_content_preserved/len(bloggers)*100:.2f}% of blogs preserved the target content")
 
 
 # predict writing style ownership using fine-tuned BERT classifier
